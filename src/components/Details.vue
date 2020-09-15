@@ -93,6 +93,8 @@ export default {
 .btn-change {
   border: 1px solid black;
   font-weight: 900;
+  padding: 0;
+
   cursor: pointer;
 }
 .btn-change:hover {
@@ -107,6 +109,8 @@ export default {
   color: white;
   border-radius: 5px;
   font-weight: 700;
+  padding: 0;
+
   background-color: darkred;
 }
 .btn-delete:hover {

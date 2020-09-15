@@ -126,10 +126,12 @@ export default {
   color: #fff;
   border: none;
   width: 30px;
+  max-width: 30px;
   height: 30px;
   line-height: 30px;
   border-radius: 10px;
   text-align: center;
+  padding: 0;
   font-size: 20px;
   font-weight: 900;
   vertical-align: middle;

@@ -125,6 +125,8 @@ export default {
 .btn-edit {
   display: inline-block;
   text-decoration: none;
+  padding: 0;
+
   cursor: pointer;
   position: absolute;
   top: 10px;
@@ -149,6 +151,8 @@ export default {
   display: inline-block;
   text-decoration: none;
   cursor: pointer;
+  padding: 0;
+
   position: absolute;
   top: 10px;
   right: 10px;
@@ -203,6 +207,8 @@ export default {
 }
 .btn-add {
   display: block;
+  padding: 0;
+
   height: 25px;
   margin: 0 auto;
   border: none;
@@ -223,6 +229,8 @@ export default {
 .btn-active {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
+  padding: 0;
+
   transform: rotate(45deg);
 }
 </style>
