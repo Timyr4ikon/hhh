@@ -1,39 +1,54 @@
 <template>
-    <div class="title-block">
-      <router-link to="/" class="go-back">Go back!</router-link>
-      <h2 class="title">Detailed info</h2>
-      <button ref="addContact" @click="addContact" class="btn">
-        +
-      </button>
-    </div>
-    <Details
-      v-for="data in contactForDetails"
-      v-bind:data="data"
-      v-bind:key="data.id"
+  <div class="title-block">
+    <router-link to="/" class="go-back">Go back!</router-link>
+    <h2 class="title">Detailed info</h2>
+    <button class="btn-edit" ref="btnEdit" @click="onEdit">
+      edit
+    </button>
+    <button ref="addContact" @click="addContact" class="btn">
+      +
+    </button>
+  </div>
+  <Details
+    v-for="data in contactForDetails"
+    v-bind:data="data"
+    v-bind:isEdit="isEdit"
+    v-bind:key="data.id"
+  />
+  <button
+    class="btn-add animate__animated animate__zoomIn animate__faster"
+    v-if="isEdit"
+    @click="updateContacts"
+  >
+    Save
+  </button>
+  <form @submit.prevent="AddDetail" v-if="isAdded">
+    <input
+      type="text"
+      name="detail_key"
+      maxlength="10"
+      placeholder="Enter key..."
+      class="input"
+      required
+      ref="key"
     />
-    <form @submit.prevent="AddDetail" v-if="isAdded">
-      <input
-        type="text"
-        name="detail_key"
-        placeholder="Enter key..."
-        class="input"
-        required
-        ref="key"
-      />
-      <input
-        type="text"
-        name="detail_key"
-        required
-        class="input"
-        placeholder="Enter value..."
-        ref="value"
-      />
-      <button class="btn-add">A:D:D</button>
-    </form>
+    <input
+      type="text"
+      name="detail_key"
+      maxlength="16"
+      required
+      class="input"
+      placeholder="Enter value..."
+      ref="value"
+    />
+    <button class="btn-add">A:D:D</button>
+  </form>
 </template>
 
 <script>
 import Details from "@/components/Details";
+import "animate.css";
+
 export default {
   data() {
     return {
@@ -41,20 +56,38 @@ export default {
       contactForDetails: {},
       contactForLocal: {},
       isAdded: false,
+      isEdit: false,
     };
   },
   mounted() {
     const contacts = JSON.parse(localStorage.getItem("contacts"));
     this.contactForLocal = contacts.find((el) => el.id === this.id);
+    localStorage.setItem("currentUser", JSON.stringify(this.contactForLocal));
     this.contactForDetails = Object.entries(this.contactForLocal);
   },
   components: {
     Details,
   },
   methods: {
+    updateContacts() {
+      const contactsToUpdate = JSON.parse(
+        localStorage.getItem("contactsToUpdate")
+      );
+      localStorage.setItem("contacts", JSON.stringify(contactsToUpdate));
+      this.isEdit = false;
+      this.$refs.btnEdit.textContent = "edit";
+    },
+    onEdit() {
+      if (this.isEdit) {
+        this.$refs.btnEdit.textContent = "edit";
+        return (this.isEdit = !this.isEdit);
+      }
+      this.isEdit = !this.isEdit;
+      this.$refs.btnEdit.textContent = "X";
+    },
     AddDetail() {
       const newDetail = [this.$refs.key.value, this.$refs.value.value];
-      this.contact.push(newDetail);
+      this.contactForDetails.push(newDetail);
       this.contactForLocal = {
         ...this.contactForLocal,
         [this.$refs.key.value]: this.$refs.value.value,
@@ -65,6 +98,10 @@ export default {
       );
       updatedContacts.push(this.contactForLocal);
       localStorage.setItem("contacts", JSON.stringify(updatedContacts));
+      localStorage.setItem("contactsToUpdate", JSON.stringify(updatedContacts));
+      localStorage.setItem("currentUser", JSON.stringify(this.contactForLocal));
+      this.isAdded = !this.isAdded;
+      this.$refs.addContact.classList.remove("btn-active");
 
       this.$refs.key.value = "";
       this.$refs.value.value = "";
@@ -82,8 +119,31 @@ export default {
 </script>
 
 <style scoped>
-.details-section{
+.details-section {
   position: relative;
+}
+.btn-edit {
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  color: #fff;
+  border: none;
+  width: 40px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 12px;
+  vertical-align: middle;
+  font-weight: 700;
+  text-align: center;
+  overflow: hidden;
+  background-image: -webkit-linear-gradient(45deg, #872294 0%, #ff71b6 100%);
+  background-image: linear-gradient(45deg, #872294 0%, #ff71b6 100%);
+  transition: 0.4s;
 }
 .btn {
   display: inline-block;
@@ -153,6 +213,11 @@ export default {
   width: 80px;
   cursor: pointer;
   font-weight: 600;
+  margin-bottom: 10px;
+}
+.btn-add:hover {
+  background-color: #6b075e;
+  transition-duration: 0.3s;
 }
 
 .btn-active {

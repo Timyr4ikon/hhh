@@ -11,6 +11,7 @@
 
 <script>
 import Item from "./Item";
+
 export default {
   props: ["contacts"],
   components: {

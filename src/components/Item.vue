@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import "animate.css";
+
 export default {
   props: ["contact"],
   data() {
@@ -33,7 +35,6 @@ export default {
       item: this.contact,
     };
   },
-  methods: {},
 };
 </script>
 
@@ -56,8 +57,8 @@ p {
   padding: 10px 15px;
 }
 .item:hover {
-  transform: translateY(5%);
-  transition-duration: 0.2s;
+  animation: headShake; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 1s; /* don't forget to set a duration! */
 }
 
 .universal-info {

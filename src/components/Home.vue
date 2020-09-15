@@ -1,10 +1,17 @@
 <template>
   <div class="section">
-    <h1 class="title">Phonebook</h1>
+    <h1 class="title animate__animated animate__pulse animate__infinite ">
+      Phonebook
+    </h1>
     <button ref="addContact" @click="addContact" class="btn">
       +
     </button>
-    <form v-if="isAdded" class="form" @submit.prevent="addTodo">
+    <form
+      v-if="isAdded"
+      ref="form"
+      class="form animate__animated animate__fadeInDown"
+      @submit.prevent="addTodo"
+    >
       <span class="label">Name</span>
       <input
         ref="name"
@@ -39,6 +46,8 @@
 <script>
 import Contacts from "@/components/Contacts";
 import id from "shortid";
+import "animate.css";
+
 export default {
   name: "phonebook",
   data() {
@@ -63,13 +72,22 @@ export default {
         return (this.isAdded = !this.isAdded);
       }
       this.$refs.addContact.classList.add("btn-active");
+
       this.isAdded = !this.isAdded;
     },
     addTodo() {
+      if (
+        this.$refs.name.value.trim() === "" ||
+        this.$refs.number.value === ""
+      ) {
+        this.$refs.name.value = "";
+        return alert("Mischievous!!!");
+      }
       const existingUser = this.contacts.find(
         (el) => el.number === this.$refs.number.value
       );
       if (existingUser) {
+        this.$refs.number.value = "";
         return alert(`The number is already in use (${existingUser.name})!`);
       }
       const newContact = {
@@ -81,9 +99,15 @@ export default {
       this.$refs.name.value = "";
       this.$refs.number.value = "";
       localStorage.setItem("contacts", JSON.stringify(this.contacts));
+      this.$refs.addContact.classList.remove("btn-active");
+
+      this.isAdded = !this.isAdded;
     },
   },
   mounted() {
+    if (localStorage.getItem("currentUser")) {
+      localStorage.removeItem("currentUser");
+    }
     if (localStorage.getItem("contacts")) {
       this.contacts = JSON.parse(localStorage.getItem("contacts"));
     }
