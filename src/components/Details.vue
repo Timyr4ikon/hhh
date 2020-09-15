@@ -2,22 +2,19 @@
   <div v-if="key !== 'id' && isDeleted" class="detail-item">
     <div>{{ key }}:</div>
     <div class="detail-value">{{ value }}</div>
-    <div
-      v-if="isEdit"
-      class="edit-block animate__animated animate__zoomIn animate__faster"
-    >
+    <div class="edit-block animate__animated animate__zoomIn animate__faster">
       <button
-        v-if="key !== 'id' && key !== 'name' && key !== 'number'"
+        v-if="key !== 'id' && key !== 'name' && key !== 'number' "
         @click="deleteEntry"
         class="btn-delete"
       >
         x
       </button>
-      <button @click="visibleInput" class="btn-change">...</button>
+      <button @click="visibleInput" v-if="isEdit" class="btn-change">...</button>
     </div>
   </div>
 
-  <form @submit.prevent="changeValue" v-if="isChange">
+  <form @submit.prevent="changeValue" v-if="isEdit && isChange">
     <input v-if="key !== 'number'" ref="newValue" type="text" />
     <input v-else ref="newValue" type="number" />
     <button type="submit">+</button>
@@ -39,13 +36,14 @@ export default {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const contacts = JSON.parse(localStorage.getItem("contacts"));
     const findedUser = contacts.find((el) => el.id === currentUser.id);
-    if (
-      this.isEdit === false &&
-      currentUser[this.key] === undefined &&
-      this.isDeleted
-    ) {
-      this.isDeleted = true;
-    }
+
+    // if (
+    //   this.isEdit === false &&
+    //   currentUser[this.key] === undefined &&
+    //   this.isDeleted === false
+    // ) {
+    //   this.isDeleted = true;
+    // }
     if (!this.isEdit && currentUser[this.key] !== findedUser[this.key]) {
       this.value = this.data[1];
     }
@@ -71,7 +69,7 @@ export default {
         if (this.isChange) {
           this.isChange = !this.isChange;
         }
-        this.isDeleted = !this.isDeleted;
+        this.isDeleted = false;
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         delete currentUser[this.key];
         const contacts = JSON.parse(localStorage.getItem("contacts"));
@@ -79,10 +77,7 @@ export default {
           (el) => el.id !== currentUser.id
         );
         updatedContacts.push(currentUser);
-        localStorage.setItem(
-          "contactsToUpdate",
-          JSON.stringify(updatedContacts)
-        );
+        localStorage.setItem("contacts", JSON.stringify(updatedContacts));
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
       }
     },
