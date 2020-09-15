@@ -157,7 +157,7 @@ export default {
   width: 30px;
   height: 30px;
   line-height: 30px;
-  border-radius: 50%;
+  border-radius: 10px;
   text-align: center;
   font-size: 20px;
   font-weight: 900;

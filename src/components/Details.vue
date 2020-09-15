@@ -4,19 +4,27 @@
     <div class="detail-value">{{ value }}</div>
     <div class="edit-block animate__animated animate__zoomIn animate__faster">
       <button
-        v-if="key !== 'id' && key !== 'name' && key !== 'number' "
+        v-if="key !== 'id' && key !== 'name' && key !== 'number'"
         @click="deleteEntry"
         class="btn-delete"
       >
         x
       </button>
-      <button @click="visibleInput" v-if="isEdit" class="btn-change">...</button>
+      <button @click="visibleInput" v-if="isEdit" class="btn-change">
+        ...
+      </button>
     </div>
   </div>
 
   <form @submit.prevent="changeValue" v-if="isEdit && isChange">
-    <input v-if="key !== 'number'" ref="newValue" type="text" />
-    <input v-else ref="newValue" type="number" />
+    <input
+      v-if="key !== 'number'"
+      ref="newValue"
+      type="text"
+      maxlength="20"
+      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+    />
+    <input v-else ref="newValue" type="number" maxlength="14" />
     <button type="submit">+</button>
   </form>
 </template>
@@ -37,13 +45,6 @@ export default {
     const contacts = JSON.parse(localStorage.getItem("contacts"));
     const findedUser = contacts.find((el) => el.id === currentUser.id);
 
-    // if (
-    //   this.isEdit === false &&
-    //   currentUser[this.key] === undefined &&
-    //   this.isDeleted === false
-    // ) {
-    //   this.isDeleted = true;
-    // }
     if (!this.isEdit && currentUser[this.key] !== findedUser[this.key]) {
       this.value = this.data[1];
     }
@@ -104,7 +105,7 @@ export default {
   cursor: pointer;
   margin-right: 5px;
   color: white;
-  border-radius: 50%;
+  border-radius: 5px;
   font-weight: 700;
   background-color: darkred;
 }
